@@ -13,7 +13,7 @@ from models import Session, Message
 from sqlalchemy.future import select
 from loguru import logger
 
-from usel_api import async_call_openai_chat_api
+from use_api import async_call_openai_chat_api
 
 logger = logger.opt(exception=True)
 messages_router = APIRouter()
@@ -70,6 +70,7 @@ async def chat_with_openai(chat_schema: ChatSchema, db: AsyncSession = Depends(g
     except HTTPException as HE:
         raise HE
     except (SQLAlchemyError, KeyError) as SE:
+        await db.rollback()
         logger.error("数据库操作失败或API响应解析错误:", exc_info=True)
         raise HTTPException(status_code=500, detail="数据库操作或API调用失败") from SE
     except Exception as E:
@@ -144,6 +145,7 @@ async def delete_message(message_id: int, db: AsyncSession = Depends(get_db)) ->
     except HTTPException as HE:
         raise HE
     except SQLAlchemyError as SE:
+        await db.rollback()
         logger.error("删除消息时，数据库删除操作失败:", exc_info=True)
         raise HTTPException(status_code=500, detail="数据库删除消息失败") from SE
     except Exception as E:

@@ -68,9 +68,9 @@ def call_openai_chat_api(
     except requests.exceptions.HTTPError as HE:
         raise HTTPException(response.status_code, f"{response.text}")from HE
     except requests.exceptions.RequestException as RE:
-        raise HTTPException(400, detail=f"API 请求异常: {model}, 错误信息: {str(RE)}") from RE
+        raise HTTPException(400, detail=f"API 请求异常: {model}, 错误信息: {RE}") from RE
     except Exception as E:
-        raise HTTPException(500, detail=f"未预期的错误: {model}, 错误信息: {str(E)}") from E
+        raise HTTPException(500, detail=f"未预期的错误: {model}, 错误信息: {E}") from E
 
 
 async def async_call_openai_chat_api(
@@ -139,9 +139,9 @@ async def async_call_openai_chat_api(
         except aiohttp.ClientResponseError as CRE:
             raise HTTPException(status_code=CRE.status, detail=f"{CRE.message}") from CRE
         except aiohttp.ClientError as CE:
-            raise HTTPException(status_code=400, detail=f"API 请求异常: {model}, 错误信息: {str(CE)}") from CE
+            raise HTTPException(status_code=400, detail=f"API 请求异常: {model}, 错误信息: {CE}") from CE
         except Exception as E:
-            raise HTTPException(status_code=500, detail=f"未预期的错误: {model}, 错误信息: {str(E)}") from E
+            raise HTTPException(status_code=500, detail=f"未预期的错误: {model}, 错误信息: {E}") from E
 
 
 # 测试 call_openai_api 函数

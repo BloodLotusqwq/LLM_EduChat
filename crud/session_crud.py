@@ -36,6 +36,7 @@ async def create_session(name: Optional[str] = None, db: AsyncSession = Depends(
         logger.error("创建会话失败，违反数据库完整性约束:", exc_info=True)
         raise HTTPException(status_code=400, detail="提供的数据违反了完整性约束") from IE
     except SQLAlchemyError as SE:
+        await db.rollback()
         logger.error("创建会话失败，执行数据库操作失败:", exc_info=True)
         raise HTTPException(status_code=500, detail="数据库查询执行失败") from SE
     except Exception as E:
@@ -98,6 +99,7 @@ async def delete_session(session_id: int, db: AsyncSession = Depends(get_db)) ->
     except HTTPException as HE:
         raise HE
     except SQLAlchemyError as SE:
+        await db.rollback()
         logger.error("删除指定会话，执行数据库查询失败:", exc_info=True)
         raise HTTPException(status_code=500, detail="数据库查询执行失败") from SE
     except Exception as E:
