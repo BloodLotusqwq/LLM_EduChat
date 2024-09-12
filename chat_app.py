@@ -75,7 +75,96 @@ class ChatWindow(QMainWindow):
         """
         初始化聊天窗口及其组件和布局。
         """
+        STYLESHEET = """
+        QWidget {
+            font-size: 14px;
+        }
+
+        QMainWindow {
+            background-color: #f0f0f0;
+        }
+
+        QPushButton {
+            background-color: #0078D7;
+            color: white;
+            border-style: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        QPushButton:hover {
+            background-color: #0053ba;
+        }
+
+        QPushButton:pressed {
+            background-color: #00397a;
+        }
+
+        QLineEdit {
+            border: 2px solid #0078D7;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        QListWidget {
+            border: 1px solid #0078D7;
+            border-radius: 5px;
+        }
+
+        QMessageBox {
+            background-color: #ffffff;
+        }
+        
+        QMenu {
+            background-color: #f0f0f0; /* 浅灰色背景，与窗口背景色一致 */
+            border: 1px solid #0078D7; /* 使用主题蓝色作为边框 */
+            border-radius: 5px; /* 添加圆角 */
+            color: #333; /* 文字颜色 */
+        }
+        
+        QMenu::item {
+            padding: 5px 20px;
+            background-color: transparent;
+        }
+        
+        QMenu::item:selected {
+            background-color: #0078D7; /* 深蓝色背景 */
+            color: white; /* 白色文字 */
+            border-radius: 3px; /* 选中项也添加圆角效果 */
+        }
+            
+        QDialog {
+            background-color: #f0f0f0;
+        }
+        
+        QLabel {
+            color: #333333;
+            font-weight: bold;
+        }
+        
+        QLineEdit:focus {
+            border: 2px solid #0053ba;
+        }
+        
+        QScrollBar:vertical {
+            border: none;
+            background: #f0f0f0;
+            width: 10px;
+        }
+        
+        QScrollBar::handle:vertical {
+            background: #0078D7;
+            min-height: 20px;
+        }
+        
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+            background: none;
+        }
+
+        """
+
         super().__init__()
+        self.setStyleSheet(STYLESHEET)
         self.setWindowTitle("MyNextChat - FastAPI Chat Application")
         self.resize(1500, 1000)
 
@@ -214,7 +303,7 @@ class ChatWindow(QMainWindow):
         # 更新最后一个用户消息项，添加ID
         if hasattr(self, 'last_user_message_item'):
             self.last_user_message_item.setData(Qt.UserRole, response['user_message_id'])
-            self.last_user_message_item=None
+            self.last_user_message_item = None
 
         # 创建AI消息的列表项，包含ID
         ai_message_item = QListWidgetItem(ai_message_text)
